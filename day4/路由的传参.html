@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="lib/vue-2.4.0.js" ></script>
+		<script type="text/javascript" src="lib/vue-router-3.0.1.js" ></script>
+	</head>
+	<body>
+		<div id="app">
+			<router-link to="./login?id=10 &name=zs">登录</router-link>
+			<router-link to="./register">注册</router-link>
+			<router-view></router-view>
+		</div>
+		<script>
+			var login={
+				template:'<h3>登录组件 ----{{ this.$route.query.id}}-----{{this.$route.query.name}}</h3>',
+				data(){
+					return{
+						msg:'12311'
+					}
+				},
+				created(){
+					console.log(this.$route);
+					console.log(this.$route.query.id);
+					console.log(this.$route.query.name);
+				}
+			}
+			var register={
+				template:'<h3>注册组件</h3>'
+			}
+			var router=new VueRouter({
+				routes:[
+				  {path:'/login',component:login},
+				  {path:'/register',component:register}
+				]
+			})
+			var vm=new Vue({
+				el:'#app',
+				data:{
+					
+				},
+				router
+			})
+		</script>
+	</body>
+</html>

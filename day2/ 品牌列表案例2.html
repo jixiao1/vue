@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="lib/vue-2.4.0.js"></script>
+		<link rel="stylesheet" type="text/css" href="lib/bootstrap-3.3.7.css"/>
+	</head>
+	<body>
+		<div id="app">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+				<h3 class="panel-title">品牌案例</h3>
+				</div>
+				<div  class="panel-body form-inline">
+					<label>
+						Id:
+						<input type="text"  class="form-control" v-model="id" />
+					</label>
+					<label>
+						Name:
+						<input type="text"  class="form-control"  v-model="name" @keyup.f2="add"/>
+					</label>
+					<input type="button" value="添加"  class="btn btn-primary" @click="add()"/>
+					<label>
+						搜索关键字:
+						<input type="text"  class="form-control"  v-model="keywords" id="search" v-focus v-color="'green'"/>
+					</label>
+				</div>
+			</div>
+			<table  class="table table-bordered table-hover table-striped">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Ctime</th>
+						<th>Opera</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="item in search(keywords)" :key="item.id">
+						<td>{{item.id}}</td>
+						<td>{{item.name}}</td>
+						<td >{{item.ctime|myfoPt}}</td>
+						<td>
+						  <a href="" @click.prevent="del(item.id)">删除</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="app2" v-color="'red'" v-fontweight="900" v-fontsize="'30px'">
+			{{dt|myfoPt}}
+		</div>
+		<script>
+			//全局的过滤器
+			Vue.filter('myfoPt',function(datar,patre=''){
+				var dt=new Date(datar);
+				var y=dt.getFullYear();
+				var m=dt.getMonth()+1;
+				var d=dt.getDate();
+				
+				
+				if(patre.toLowerCase()==='yyyy-mm-hh'){
+					return `${y}-${m}-${d}`;
+				}else{
+					var hh=dt.getHours();
+					if(hh<10){
+						hh="0"+hh;
+					}
+					var mm=dt.getMinutes();
+					if(mm<10){
+						mm="0"+mm;
+					}
+					var ss=dt.getSeconds();
+					if(ss<10){
+						ss="0"+ss;
+					}
+					return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+				}
+			})
+			//自定义修饰符
+			Vue.config.keyCodes.f2=113;
+			//定义全局指令
+			Vue.directive('focus',{
+				bind:function(el){
+					
+				},
+				inserted:function(el){
+					el.focus();
+				},
+				update:function(el){
+					
+				}
+			})
+			Vue.directive('color',{
+				bind:function(el,binding){
+					//el.style.color="red";
+					/*console.log(binding.name);
+					console.log(binding.value);
+					console.log(binding.expression);*/
+					el.style.color=binding.value;
+				}
+			})
+			var vm2=new Vue({
+				el:'#app2',
+				data:{
+					dt:new Date()
+				},
+				filters:{
+					myfoPt:function(datar,patre=''){
+						var dt=new Date(datar);
+				var y=dt.getFullYear();
+				var m=(dt.getMonth()+1).toString().padStart(2,'0');
+				var d=dt.getDate().toString().padStart(2,'0');
+				
+				
+				if(patre.toLowerCase()==='yyyy-mm-hh'){
+					return `${y}-${m}-${d}`;
+				}else{
+					var hh=dt.getHours().toString().padStart(2,'0');
+					
+					var mm=dt.getMinutes().toString().padStart(2,'0');
+					
+					var ss=dt.getSeconds().toString().padStart(2,'0');//先装换为字符串,不足两位的在前面补0
+					
+					return `${y}-${m}-${d} ${hh}:${mm}:${ss} ~~~`;
+				}
+					}
+				},
+				//定义私有的指令
+				directives:{
+					'fontweight':{
+						bind:function(el,binding){
+							el.style.fontWeight=binding.value
+						}
+					},
+					
+					'fontsize':function(el,binding){
+						el.style.fontSize=parseInt(binding.value)+"px";
+					}
+				}
+			})
+			var vm=new Vue({
+				el:'#app',
+				data:{
+					id:'',
+					name:'',
+					keywords:'',
+					list:[
+					{id:1,name:'宝马',ctime:new Date()},
+					{id:2,name:'奔驰',ctime:new Date()}
+					]
+				},
+				methods:{
+					add(){
+						var car={id:this.id,name:this.name,ctime:new Date()};
+						this.list.push(car);
+						this.id=this.name='';
+					},
+					del(id){
+						// 根据Id删除数据
+                      // 分析：
+                       // 1. 如何根据Id，找到要删除这一项的索引
+                      // 2. 如果找到索引了，直接调用 数组的 splice 方法
+                    /*  this.list.some((item,i)=>{
+                      	if(item.id==id){
+                      		this.list.splice(i,1);
+                      		return true;
+                      	}
+                      })*/
+                   var index= this.list.findIndex(item =>{
+                     	if(item.id==id){
+                     		return true;
+                     	}
+                     	this.list.splice(index,1);
+                     })
+
+					},
+					search(keywords){
+						/*var newList=[];
+						this.list.forEach(item =>{
+							if(item.name.indexOf(keywords)!=-1){
+								newList.push(item);
+							}
+						})
+						 /* var newList = []
+          this.list.forEach(item => {
+            if (item.name.indexOf(keywords) != -1) {
+              newList.push(item)
+            }
+          })
+          return newList */
+
+          // 注意：  forEach   some   filter   findIndex   这些都属于数组的新方法，
+          //  都会对数组中的每一项，进行遍历，执行相关的操作；
+          //if(item.name.indexOf(keywords) != -1)
+
+            // 注意 ： ES6中，为字符串提供了一个新方法，叫做  String.prototype.includes('要包含的字符串')
+            //  如果包含，则返回 true ，否则返回 false
+            //  contain
+						/*return newList;*/
+						 return this.list.filter(item =>{
+							if(item.name.includes(keywords)){
+								return item
+							}
+						})
+					}
+					
+				}
+				
+			})
+			//document.getElementById("search").focus();
+		</script>
+	</body>
+</html>

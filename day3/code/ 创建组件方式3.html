@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="../lib/vue-2.4.0.js" ></script>
+	</head>
+	<body>
+		<div id="app">
+			<com2></com2>
+		
+		</div>
+		<div id="app2">
+			<com2></com2>
+			<login></login>
+		</div>
+		
+			<template id="di">
+				<div>
+					<h1>123</h1>
+				</div>
+			</template>
+			<template id="tem">
+				<h3>这是私有的login组件</h3>
+			</template>
+		<script>
+			// 注意:不论是哪种方式创建出来的组件,组件的 template 属性指向的模板内容,
+			//必须有且只能有唯一的一个根元素
+			Vue.component('com2',{
+				template:'#di'
+			})
+			var vm=new Vue({
+				el:'#app',
+				data:{
+					
+				}
+			})
+			var vm2=new Vue({
+				el:'#app2',
+				data:{
+					
+				},
+				methods:{
+					
+				},
+				filters:{
+					
+				},
+				directives:{
+					
+				},
+				components:{
+					login:{
+						template:'#tem'
+					}
+				},
+				beforeCreate(){
+					
+				},
+				created(){
+					
+				},
+				beforeMount(){
+					
+				},
+			  mounted(){
+			  	
+			  },
+			  beforeUpdate(){
+			  	
+			  },
+			  updated(){
+			  	
+			  },
+			  beforeDestroy(){
+			  	
+			  },
+			  destroyed(){
+			  	
+			  }
+				
+			})
+			
+				
+			
+			
+			
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="lib/vue-2.4.0.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<input type="text" v-model="firstname"  />+
+			<input type="text" v-model="lastname"  />=
+			<input type="text" v-model="Fullname" />
+		</div>
+		<script>
+			var vm=new Vue({
+				el:'#app',
+				data:{
+					firstname:'',
+					lastname:'',
+					Fullname:''
+				},
+				methods:{
+					
+				},
+				watch:{
+					'firstname':function(neWol,oldWOL){
+						//this.Fullname=this.firstname+this.lastname
+						//console.log(neWol,oldWOL);
+						this.Fullname=neWol+'-'+this.lastname
+					},
+					'lastname':function(neWol,oldWOL){
+						//this.Fullname=this.firstname+this.lastname
+						//console.log(neWol,oldWOL);
+						this.Fullname=this.firstname+'-'+neWol
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
